@@ -52,17 +52,9 @@ def start_tor_service():
         print("Tor process started...")
         return tor_process
     #     print("Tor service started. Press Ctrl+C to stop.")
-    #     tor_process.wait()  # Wait for keyboard interruption
+
     except Exception as e:
         print(e)
-
-    # except KeyboardInterrupt:
-    #     print("Keyboard interruption detected. Stopping Tor service.")
-    #     tor_process.terminate()  # Stop the Tor service
-    #     sys.exit(0)  # Exit the Python program
-
-# def do_this():
-    
 
 if __name__ == "__main__":
     sproc = start_tor_service()
@@ -104,9 +96,7 @@ if __name__ == "__main__":
 
         except KeyboardInterrupt:
             print("Script interrupted by user.")
-            # close_tor(tor_process=sproc,
-            #           driver=driver,
-            #           controller=controller)
+
         finally:
             print("Closing chromedriver.")
             close_tor(tor_process=sproc,
