@@ -13,6 +13,9 @@ tor_process = None
 tor_pathh = r"D:\\C\\Program Files\\Tor\\Tor Browser\\Browser\\TorBrowser\\Tor\\tor.exe"
 assert os.path.exists(tor_pathh)
 
+SOCKET_PORT = '9150'
+CONTROL_PORT = '9151'
+
 def check_browser_status(driver):
     try:
         # CHECK IF BROWSER IS RUNNING
@@ -41,8 +44,8 @@ def start_tor_service():
         tor_process = stem.process.launch_tor_with_config(
             tor_cmd = tor_pathh,
             config={
-                'SocksPort': '9150',  # Set the port to 9151
-                'ControlPort': '9151',  # Set the control port (for communication with Tor)
+                'SocksPort': SOCKET_PORT,  # Set the socket port
+                'ControlPort': CONTROL_PORT,  # Set the control port (for communication with Tor)
             },
             init_msg_handler=None,
             take_ownership=True,
@@ -61,7 +64,8 @@ if __name__ == "__main__":
 
     # TRY 9051 OR 9151, WHICHEVER WORKS
     # with Controller.from_port(port=9051) as controller:
-    with Controller.from_port(port=9151) as controller:
+    # with Controller.from_port(port=9151) as controller:
+    with Controller.from_port(port = int(CONTROL_PORT)) as controller:
         """
         FIRST OPEN TOR SERVICE 
         THEN CONNECT IT VIA PORT 9050 OR 9051
@@ -82,7 +86,8 @@ if __name__ == "__main__":
 
         # TRY 9050 OR 9150, WHICHEVER WORKS
         # chrome_options.add_argument("--proxy-server=socks5://127.0.0.1:9050") 
-        chrome_options.add_argument("--proxy-server=socks5://127.0.0.1:9150")
+        # chrome_options.add_argument("--proxy-server=socks5://127.0.0.1:9150")
+        chrome_options.add_argument(f"--proxy-server=socks5://127.0.0.1:{SOCKET_PORT}")
 
         print("Browser (Chrome) options added...")
         
