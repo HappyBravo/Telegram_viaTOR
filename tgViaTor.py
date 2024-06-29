@@ -3,6 +3,7 @@ import stem.process
 from stem.control import Controller
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 
 import time, os, sys, subprocess
 
@@ -12,13 +13,23 @@ tor_process = None
 tor_pathh = r"D:\\C\\Program Files\\Tor\\Tor Browser\\Browser\\TorBrowser\\Tor\\tor.exe"
 assert os.path.exists(tor_pathh)
 
-def close_tor(tor_process, driver, controller):
-    # except KeyboardInterrupt:
-    print("Keyboard interruption detected. Stopping Tor service.")
-    tor_process.terminate()  # Stop the Tor service
+def check_browser_status(driver):
+    try:
+        # CHECK IF BROWSER IS RUNNING
+        driver.find_element(By.TAG_NAME, "body")
+        return True  # BRROWSER IS OPEN 
+    except Exception:
+        return False  # BROWSER IS NOT OPEN 
 
+def close_tor(tor_process, driver, controller):
+    # Stop the Tor service
+    print("Stopping Tor service.")
     print("Closing Tor circuit...")
-    driver.quit()  # Close Chrome driver
+    tor_process.terminate()  
+
+    # Close Chrome driver
+    print("Closing browser...")
+    driver.quit() 
     controller.close()  # Clean up Tor circuit
     # sys.exit(0)
 
@@ -88,17 +99,19 @@ if __name__ == "__main__":
         try:
             # OPEN LINK
             driver.get(load_link)
-            while True:
-                time.sleep(1)
+            while True and check_browser_status(driver):
+                time.sleep(2)
 
         except KeyboardInterrupt:
-            # print("Script interrupted by user.")
+            print("Script interrupted by user.")
+            # close_tor(tor_process=sproc,
+            #           driver=driver,
+            #           controller=controller)
+        finally:
+            print("Closing chromedriver.")
             close_tor(tor_process=sproc,
                       driver=driver,
                       controller=controller)
-        finally:
-            print("Closing chromedriver.")
-            driver.quit()  # Close Chrome driver
 
     print("Clean up Tor circuit")
     controller.close()
