@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 import time, os, sys, subprocess
 
 load_link = "https://web.telegram.org/k/"
-user_dir = "C:/Users/Happy/Desktop/Telegram_viaTOR/Chrome_data" # <--- ENTER FULL PATH ... IMPORTANT !  
+user_dir = "E:/Downloads/Telegram_viaTOR/Chrome_data" # <--- ENTER FULL PATH ... IMPORTANT ⭕!  
 tor_process = None
 tor_pathh = r"D:\\C\\Program Files\\Tor\\Tor Browser\\Browser\\TorBrowser\\Tor\\tor.exe"
 assert os.path.exists(tor_pathh)
